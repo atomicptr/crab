@@ -4,8 +4,8 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/atomicptr/crab/crawler"
-	"github.com/atomicptr/crab/meta"
+	"github.com/atomicptr/crab/pkg/crawler"
+	"github.com/atomicptr/crab/pkg/meta"
 )
 
 func addUserAgentToRequest() crawler.RequestModifierFunc {

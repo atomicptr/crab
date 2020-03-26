@@ -12,7 +12,7 @@ var crawlCommandFlags = newCrawlerFlagOptions()
 
 var Command = &cobra.Command{
 	Use:   "crawl [domains...]",
-	Short: "Crawl singular URLs.",
+	Short: "Crawl singular URLs",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := validateCrawlerFlagOptions(crawlCommandFlags); err != nil {
 			fmt.Printf("Flag options are invalid:\n\t%s\n", err)

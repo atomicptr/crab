@@ -15,4 +15,5 @@ var rootCommand = &cobra.Command{
 func init() {
 	rootCommand.AddCommand(crawl.Command)
 	rootCommand.AddCommand(crawl.SitemapCommand)
+	rootCommand.AddCommand(crawl.ListCommand)
 }

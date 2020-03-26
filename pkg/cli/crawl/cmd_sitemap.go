@@ -13,7 +13,8 @@ import (
 var sitemapCommandFlags = newCrawlerFlagOptions()
 
 var SitemapCommand = &cobra.Command{
-	Use: "crawl:sitemap [sitemapPath]",
+	Use:   "crawl:sitemap [sitemapPath]",
+	Short: "Crawl through a sitemap",
 	Run: func(cmd *cobra.Command, args []string) {
 		if err := validateCrawlerFlagOptions(sitemapCommandFlags); err != nil {
 			fmt.Printf("Flag options are invalid:\n\t%s\n", err)

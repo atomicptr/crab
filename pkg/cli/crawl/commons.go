@@ -1,8 +1,10 @@
 package crawl
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
+	"strings"
 
 	"github.com/atomicptr/crab/pkg/crawler"
 	"github.com/spf13/cobra"
@@ -66,6 +68,13 @@ func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions craw
 	requests, err := crawler.CreateRequestsFromUrls(urls, modifier)
 	if err != nil {
 		return err
+	}
+
+	for _, req := range requests {
+		requestUrl := req.URL.String()
+		if strings.HasPrefix(requestUrl, "/") {
+			return fmt.Errorf("you can't use a partial URL paths without specifying a prefix-url: %s", requestUrl)
+		}
 	}
 
 	crawl := crawler.Crawler{

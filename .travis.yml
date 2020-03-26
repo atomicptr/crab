@@ -5,7 +5,7 @@ before_script:
   - go get -u github.com/mattn/goveralls
   - go get -u github.com/golangci/golangci-lint/cmd/golangci-lint
 script:
-  - go build
+  - go build cmd/crab/main.go
   - go test -v -covermode=count -coverprofile=coverage.out ./...
   - $(go env GOPATH)/bin/golangci-lint run
   - $(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci

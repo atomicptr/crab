@@ -8,7 +8,7 @@ import (
 
 var rootCommand = &cobra.Command{
 	Use:     "crab",
-	Short:   "Crab - A versatile web crawler for all your needs.",
+	Short:   "Crab - A versatile tool to crawl dozens of URLs from a given source.",
 	Version: meta.VersionString(),
 }
 

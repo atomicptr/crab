@@ -6,4 +6,5 @@ require (
 	github.com/beevik/etree v1.1.0
 	github.com/pkg/errors v0.8.0
 	github.com/spf13/cobra v0.0.6
+	github.com/stretchr/testify v1.2.2
 )

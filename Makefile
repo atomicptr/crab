@@ -12,3 +12,5 @@ build:
 		cmd/crab/main.go
 test:
 	go test -v ./...
+release-dryrun:
+	GIT_COMMIT=$(git_commit) GIT_VERSION=$(git_version) goreleaser --snapshot --skip-publish --rm-dist

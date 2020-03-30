@@ -1,0 +1,54 @@
+before:
+  hooks:
+    - make clean
+builds:
+- main: ./cmd/crab/main.go
+  ldflags:
+    - -X github.com/atomicptr/crab/pkg/meta.Version={{.Env.GIT_VERSION}}
+    - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.Env.GIT_COMMIT}}
+  env:
+    - CGO_ENABLED=0
+  goos:
+    - linux
+    - darwin
+    - windows
+  goarch:
+    - amd64
+archives:
+- replacements:
+    darwin: Darwin
+    linux: Linux
+    windows: Windows
+    386: i386
+    amd64: x86_64
+checksum:
+  name_template: 'checksums.txt'
+snapshot:
+  name_template: "{{ .Tag }}-next"
+changelog:
+  sort: asc
+  filters:
+    exclude:
+    - '^docs:'
+    - '^test:'
+# Release
+## Github Releases
+release:
+  github:
+    owner: atomicptr
+    name: crab
+  draft: true
+## Snap
+snapcrafts:
+  - name: crab
+    publish: true
+    summary: A versatile tool to crawl dozens of URLs from a given source.
+    description: |
+      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+    grade: stable
+    confinement: strict
+    license: MIT
+    base: core18
+    apps:
+      crab:
+        plugs: ["network"]

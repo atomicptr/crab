@@ -19,8 +19,9 @@ script:
   - go test -v -covermode=count -coverprofile=coverage.out ./...
   - "$(go env GOPATH)/bin/golangci-lint run"
   - "$(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci"
-  - git --no-pager diff
 after_success:
+  # reset go.mod/go.sum back to their initial state (after being modified by go get -u)
+  - git checkout -- go.mod go.sum
   # login to snapcraft
   - test -n "$TRAVIS_TAG" && snapcraft login --with snap.login
 deploy:

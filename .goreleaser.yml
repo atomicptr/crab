@@ -1,5 +1,7 @@
 builds:
 - main: ./cmd/crab/main.go
+  flags:
+    - -mod=readonly
   ldflags:
     - -X github.com/atomicptr/crab/pkg/meta.Version={{.Version}}
     - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.FullCommit}}

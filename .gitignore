@@ -2,6 +2,7 @@
 /crab*
 /main*
 /dist
+/snap.login
 
 # Created by https://www.gitignore.io/api/go,linux,macos,windows,intellij+all,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=go,linux,macos,windows,intellij+all,visualstudiocode

@@ -1,8 +1,8 @@
 builds:
 - main: ./cmd/crab/main.go
   ldflags:
-    - -X github.com/atomicptr/crab/pkg/meta.Version={{.Env.GIT_VERSION}}
-    - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.Env.GIT_COMMIT}}
+    - -X github.com/atomicptr/crab/pkg/meta.Version={{.Version}}
+    - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.FullCommit}}
   env:
     - CGO_ENABLED=0
   goos:

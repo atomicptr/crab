@@ -25,7 +25,7 @@ after_success:
 deploy:
   - provider: script
     skip_cleanup: true
-    script: GIT_COMMIT=$(git rev-list -1 HEAD) GIT_VERSION=$(git --no-pager tag --points-at HEAD | head -n 1) curl -sL https://git.io/goreleaser | bash
+    script: curl -sL https://git.io/goreleaser | bash
     on:
       tags: true
       condition: "$TRAVIS_OS_NAME = linux"

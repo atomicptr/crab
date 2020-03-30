@@ -10,6 +10,20 @@ Useful for:
 * Checking response times
 * Identifying dead or broken pages
 
+## Install
+
+### Binaries
+
+[You can download the newest release from here for Linux, macOS and Windows.](https://github.com/atomicptr/crab/releases/)
+
+### Snap
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/crab)
+
+```bash
+$ snap install crab
+```
+
 ## Usage
 
 Crawl singular URLs:
@@ -37,10 +51,6 @@ Add some cookies/headers:
 ```bash
 $ crab crawl:sitemap https://domain.com/sitemap.xml --cookie auth_token=12345 --header X-Bypass-Cache=1
 ```
-
-## Install
-
-Coming soon...
 
 ## License
 

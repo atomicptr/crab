@@ -36,7 +36,7 @@ release:
   github:
     owner: atomicptr
     name: crab
-  draft: true
+  draft: false
 ## Snap
 snapcrafts:
   - name: crab

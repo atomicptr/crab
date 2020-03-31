@@ -18,10 +18,23 @@ Useful for:
 
 ### Snap
 
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/crab)
-
 ```bash
 $ snap install crab
+```
+
+[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/crab)
+
+### Homebrew
+
+```bash
+$ brew install atomictr/tools/crab
+```
+
+### Scoop
+
+```bash
+$ scoop bucket add atomicptr https://github.com/atomicptr/scoop-bucket
+$ scoop install crab
 ```
 
 ## Usage

@@ -51,3 +51,22 @@ snapcrafts:
     apps:
       crab:
         plugs: ["network"]
+## Homebrew
+brews:
+  - name: crab
+    github:
+      owner: atomicptr
+      name: homebrew-tools
+    folder: Formula
+    homepage: "https://github.com/atomicptr/crab"
+    descriptions: |
+      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+## Scoop
+scoop:
+  bucket:
+    owner: atomicptr
+    name: scoop-bucket
+  homepage: "https://github.com/atomicptr/crab"
+  descriptions: |
+    A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+  license: MIT

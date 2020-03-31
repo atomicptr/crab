@@ -59,7 +59,7 @@ brews:
       name: homebrew-tools
     folder: Formula
     homepage: "https://github.com/atomicptr/crab"
-    descriptions: |
+    description: |
       A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
 ## Scoop
 scoop:
@@ -67,6 +67,6 @@ scoop:
     owner: atomicptr
     name: scoop-bucket
   homepage: "https://github.com/atomicptr/crab"
-  descriptions: |
+  description: |
     A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
   license: MIT

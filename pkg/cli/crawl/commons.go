@@ -46,6 +46,13 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		nil,
 		"add headers (as key=value pairs) to each request",
 	)
+	cmd.PersistentFlags().StringVarP(
+		&flagOptions.FilterStatusQuery,
+		"filter-status",
+		"",
+		"",
+		"filter logs by status",
+	)
 }
 
 func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier, flagOptions crawlerFlagOptions) {
@@ -82,6 +89,7 @@ func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions craw
 		HttpClient: http.Client{
 			Timeout: flagOptions.HttpTimeout,
 		},
+		FilterStatusQuery: flagOptions.FilterStatusQuery,
 	}
 	crawl.Crawl(requests)
 

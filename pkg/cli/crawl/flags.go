@@ -8,13 +8,14 @@ import (
 )
 
 type crawlerFlagOptions struct {
-	NumberOfWorkers int
-	PrefixUrl       string
-	HttpTimeout     time.Duration
-	CookieStrings   []string
-	HeaderStrings   []string
-	cookieMap       map[string]string
-	headerMap       map[string]string
+	NumberOfWorkers   int
+	PrefixUrl         string
+	HttpTimeout       time.Duration
+	CookieStrings     []string
+	HeaderStrings     []string
+	FilterStatusQuery string
+	cookieMap         map[string]string
+	headerMap         map[string]string
 }
 
 const (

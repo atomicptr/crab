@@ -4,21 +4,26 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
-	"sync"
 	"time"
+
+	"github.com/atomicptr/crab/pkg/filter"
 )
 
-var printMutex sync.Mutex
-
 // safePrintln logs a message protected by a mutex
-func safePrintln(message string) {
-	printMutex.Lock()
-	fmt.Println(message)
-	printMutex.Unlock()
+func (c *Crawler) safePrintln(statusCode int, message string) {
+	if c.statusFilter == nil {
+		c.statusFilter = filter.NewFilter()
+	}
+
+	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
+		c.printMutex.Lock()
+		fmt.Println(message)
+		c.printMutex.Unlock()
+	}
 }
 
 // log logs a json log with the status code, url, timestamp and duration of the request
-func log(statusCode int, url string, duration time.Duration) {
+func (c *Crawler) log(statusCode int, url string, duration time.Duration) {
 	message := fmt.Sprintf(
 		`{"status": %d, "url": "%s", "time": %d, "duration": %d}`,
 		statusCode,
@@ -26,11 +31,11 @@ func log(statusCode int, url string, duration time.Duration) {
 		time.Now().Unix(),
 		duration.Milliseconds(),
 	)
-	safePrintln(message)
+	c.safePrintln(statusCode, message)
 }
 
 // logError logs a json log with an error, url, timestamp and duration of the request
-func logError(err error, url string, duration time.Duration) {
+func (c *Crawler) logError(err error, url string, duration time.Duration) {
 	message := fmt.Sprintf(
 		`{"err": %s, "url": "%s", "time": %d, "duration": %d}`,
 		escapeString(err.Error()),
@@ -38,7 +43,7 @@ func logError(err error, url string, duration time.Duration) {
 		time.Now().Unix(),
 		duration.Milliseconds(),
 	)
-	safePrintln(message)
+	c.safePrintln(218, message)
 }
 
 // escapeString escapes a string to be used as a json value

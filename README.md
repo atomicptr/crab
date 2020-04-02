@@ -65,6 +65,23 @@ Add some cookies/headers:
 $ crab crawl:sitemap https://domain.com/sitemap.xml --cookie auth_token=12345 --header X-Bypass-Cache=1
 ```
 
+### Filter by Status Code
+
+You can filter the output by it's status code
+
+```bash
+# This will only return responses with a 200 OK
+$ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=200
+# This will only return responses that are not OK
+$ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=!200
+# This will only return responses between 500-599 (range)
+$ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=500-599
+# This will only return responses with 200 or 404 (multiple, be aware if one condition is true they all are)
+$ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=200,404
+# This will only return responses with a code greater than 500
+$ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=>500
+```
+
 ## License
 
 MIT

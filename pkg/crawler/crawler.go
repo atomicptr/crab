@@ -5,13 +5,17 @@ import (
 	"sync"
 	"time"
 
+	"github.com/atomicptr/crab/pkg/filter"
 	"github.com/pkg/errors"
 )
 
 //Crawler crawls urls in parallel
 type Crawler struct {
-	HttpClient      http.Client
-	NumberOfWorkers int
+	HttpClient        http.Client
+	NumberOfWorkers   int
+	FilterStatusQuery string
+	statusFilter      *filter.Filter
+	printMutex        sync.Mutex
 }
 
 //Crawl crawls a list of HTTP requests with a set number of workers
@@ -50,9 +54,9 @@ func (c *Crawler) crawlRequest(req *http.Request) {
 	duration := time.Since(requestStartTime)
 
 	if err != nil {
-		logError(errors.Wrapf(err, "error with url %s", req.URL), req.URL.String(), duration)
+		c.logError(errors.Wrapf(err, "error with url %s", req.URL), req.URL.String(), duration)
 		return
 	}
 
-	log(res.StatusCode, req.URL.String(), duration)
+	c.log(res.StatusCode, req.URL.String(), duration)
 }

@@ -70,3 +70,11 @@ scoop:
   description: |
     A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
   license: MIT
+## Docker
+dockers:
+  - dockerfile: Dockerfile
+    image_templates:
+      - "atomicptr/crab:latest"
+      - "atomicptr/crab:{{.Tag}}"
+      - "atomicptr/crab:v{{.Major}}"
+      - "atomicptr/crab:v{{.Major}}.{{.Minor}}"

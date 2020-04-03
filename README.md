@@ -37,6 +37,14 @@ $ scoop bucket add atomicptr https://github.com/atomicptr/scoop-bucket
 $ scoop install crab
 ```
 
+### Docker
+
+```bash
+$ docker run --rm atomicptr/crab --help
+# Example
+$ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
+```
+
 ## Usage
 
 Crawl singular URLs:

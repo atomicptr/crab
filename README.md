@@ -14,7 +14,18 @@ Useful for:
 
 ### Binaries
 
-[You can download the newest release from here for Linux, macOS and Windows.](https://github.com/atomicptr/crab/releases/)
+[You can download the newest release from here for Linux (including .deb and .rpm), macOS and Windows.](https://github.com/atomicptr/crab/releases/)
+
+### Docker
+
+[Docker Hub](https://hub.docker.com/r/atomicptr/crab)
+
+```bash
+$ docker pull atomicptr/crab
+# Example
+$ docker run --rm atomicptr/crab --help
+$ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
+```
 
 ### Snap
 
@@ -35,14 +46,6 @@ $ brew install atomictr/tools/crab
 ```bash
 $ scoop bucket add atomicptr https://github.com/atomicptr/scoop-bucket
 $ scoop install crab
-```
-
-### Docker
-
-```bash
-$ docker run --rm atomicptr/crab --help
-# Example
-$ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
 ```
 
 ## Usage

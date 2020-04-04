@@ -26,6 +26,11 @@ func NewFilter() *Filter {
 
 // IsValid checks if the query is valid for the given value
 func (f *Filter) IsValid(query string, value int64) bool {
+	// empty means no filter was supplied which is always good!
+	if query == "" {
+		return true
+	}
+
 	queries := strings.Split(query, ",")
 
 	result := false

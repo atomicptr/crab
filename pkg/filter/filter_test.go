@@ -5,6 +5,13 @@ import (
 	"testing"
 )
 
+func TestFilterIsValidEmptyQuery(t *testing.T) {
+	filter := NewFilter()
+	assert.True(t, filter.IsValid("", 200))
+	assert.True(t, filter.IsValid("", 404))
+	assert.True(t, filter.IsValid("", 500))
+}
+
 func TestFilterIsValidSimple(t *testing.T) {
 	filter := NewFilter()
 	assert.True(t, filter.IsValid("200", 200))

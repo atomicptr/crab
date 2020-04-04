@@ -10,7 +10,7 @@ import (
 
 func addUserAgentToRequest() crawler.RequestModifierFunc {
 	return func(req *http.Request) {
-		req.Header.Set("User-Agent", meta.UserAgent)
+		req.Header.Set("User-Agent", meta.UserAgent())
 	}
 }
 

@@ -17,7 +17,7 @@ func TestAddUserAgentToRequest(t *testing.T) {
 	modifier.Do(req)
 
 	assert.NotEmpty(t, req.Header.Get("User-Agent"))
-	assert.Equal(t, meta.UserAgent, req.Header.Get("User-Agent"))
+	assert.Equal(t, meta.UserAgent(), req.Header.Get("User-Agent"))
 }
 
 func TestAddPrefixUrlToRequest(t *testing.T) {

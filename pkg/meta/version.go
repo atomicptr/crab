@@ -4,8 +4,14 @@ import "fmt"
 
 var Version = ""
 var GitCommit = ""
-var UserAgent = "github.com/atomicptr/crab"
+var UserAgentBase = "github.com/atomicptr/crab"
 
+// UserAgent returns the user agent
+func UserAgent() string {
+	return fmt.Sprintf("%s (%s)", UserAgentBase, VersionString())
+}
+
+// VersionString returns the build version and commit.
 func VersionString() string {
 	commitString := ""
 	// ignore warning, this value will be later added as a build flag

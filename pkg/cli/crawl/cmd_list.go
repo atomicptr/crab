@@ -37,7 +37,7 @@ var ListCommand = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = crawlUrls(urls, modifier, listCommandFlags)
+		err = crawlUrls(urls, modifier, listCommandFlags, cmd.OutOrStdout())
 		if err != nil {
 			fmt.Printf("Could not create crawlable URLs:\n\t%s\n", err)
 			os.Exit(1)

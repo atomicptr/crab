@@ -38,7 +38,7 @@ var SitemapCommand = &cobra.Command{
 			os.Exit(1)
 		}
 
-		err = crawlUrls(urls, modifier, sitemapCommandFlags)
+		err = crawlUrls(urls, modifier, sitemapCommandFlags, cmd.OutOrStdout())
 		if err != nil {
 			fmt.Printf("Could not create crawlable URLs:\n\t%s\n", err)
 			os.Exit(1)

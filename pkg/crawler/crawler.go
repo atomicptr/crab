@@ -1,6 +1,7 @@
 package crawler
 
 import (
+	"io"
 	"net/http"
 	"sync"
 	"time"
@@ -14,6 +15,7 @@ type Crawler struct {
 	HttpClient        http.Client
 	NumberOfWorkers   int
 	FilterStatusQuery string
+	OutWriter         io.Writer
 	statusFilter      *filter.Filter
 	printMutex        sync.Mutex
 }

@@ -17,7 +17,7 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
 		c.printMutex.Lock()
-		fmt.Println(message)
+		_, _ = fmt.Fprintln(c.OutWriter, message)
 		c.printMutex.Unlock()
 	}
 }

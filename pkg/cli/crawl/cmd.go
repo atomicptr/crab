@@ -27,7 +27,7 @@ var Command = &cobra.Command{
 		modifier := crawler.RequestModifier{}
 		registerStandardCrawlCommandFlagModifiers(&modifier, crawlCommandFlags)
 
-		err := crawlUrls(args, modifier, crawlCommandFlags)
+		err := crawlUrls(args, modifier, crawlCommandFlags, cmd.OutOrStdout())
 		if err != nil {
 			fmt.Printf("Could not create crawlable URLs:\n\t%s\n", err)
 			os.Exit(1)

@@ -2,6 +2,7 @@ package crawl
 
 import (
 	"fmt"
+	"io"
 	"net/http"
 	"net/url"
 	"strings"
@@ -71,7 +72,7 @@ func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier
 	}
 }
 
-func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions crawlerFlagOptions) error {
+func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions crawlerFlagOptions, outWriter io.Writer) error {
 	requests, err := crawler.CreateRequestsFromUrls(urls, modifier)
 	if err != nil {
 		return err
@@ -90,6 +91,7 @@ func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions craw
 			Timeout: flagOptions.HttpTimeout,
 		},
 		FilterStatusQuery: flagOptions.FilterStatusQuery,
+		OutWriter:         outWriter,
 	}
 	crawl.Crawl(requests)
 

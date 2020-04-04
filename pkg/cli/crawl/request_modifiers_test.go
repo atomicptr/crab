@@ -44,6 +44,18 @@ func TestAddPrefixUrlToRequest(t *testing.T) {
 	}
 }
 
+func TestAddPrefixUrlToRequestWithInvalidPrefixUrl(t *testing.T) {
+	prefixUrl := "https://this is not a valid url"
+
+	modifier := crawler.RequestModifier{}
+	modifier.With(addPrefixUrlToRequest(prefixUrl))
+
+	req := httptest.NewRequest("GET", "https://example.com", strings.NewReader(""))
+	modifier.Do(req)
+
+	assert.Equal(t, "https://example.com", req.URL.String())
+}
+
 func TestAddCookiesToRequest(t *testing.T) {
 	modifier := crawler.RequestModifier{}
 	modifier.With(addCookiesToRequest(crawlerFlagOptions{

@@ -17,14 +17,12 @@ func addUserAgentToRequest() crawler.RequestModifierFunc {
 func addPrefixUrlToRequest(prefixUrl string) crawler.RequestModifierFunc {
 	return func(req *http.Request) {
 		parsedPrefixUrl, err := url.Parse(prefixUrl)
-		if err != nil {
+		if err != nil || parsedPrefixUrl.String() == "" {
+			// prefix url couldn't be parsed just abort
 			return
 		}
 
-		requestUrl, err := url.Parse(req.URL.String())
-		if err != nil {
-			return
-		}
+		requestUrl, _ := url.Parse(req.URL.String())
 
 		requestUrl.Scheme = parsedPrefixUrl.Scheme
 		requestUrl.Host = parsedPrefixUrl.Host

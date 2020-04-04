@@ -53,6 +53,14 @@ func TestRuleIsGreaterThan(t *testing.T) {
 	assert.Equal(t, ResultDoesNotApply, RuleIsGreaterThan("200-299", 200))
 }
 
+func TestRuleIsGreaterThanInvalidQuery(t *testing.T) {
+	assert.Equal(t, ResultDoesNotApply, RuleIsGreaterThan(">test", 200))
+}
+
+func TestRuleIsSmallerThanInvalidQuery(t *testing.T) {
+	assert.Equal(t, ResultDoesNotApply, RuleIsSmallerThan("<test", 200))
+}
+
 func TestRuleIsSmallerThan(t *testing.T) {
 	assert.Equal(t, ResultTrue, RuleIsSmallerThan("<400", 399))
 	assert.Equal(t, ResultFalse, RuleIsSmallerThan("<400", 400))

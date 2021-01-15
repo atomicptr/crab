@@ -33,6 +33,20 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		defaultHttpTimeout,
 		"set http timeout for requests",
 	)
+	cmd.PersistentFlags().StringVarP(
+		&flagOptions.AuthUsername,
+		"auth-user",
+		"",
+		"",
+		"set HTTP basic authentication username",
+	)
+	cmd.PersistentFlags().StringVarP(
+		&flagOptions.AuthPassword,
+		"auth-pass",
+		"",
+		"",
+		"set HTTP basic authentication password",
+	)
 	cmd.PersistentFlags().StringSliceVarP(
 		&flagOptions.CookieStrings,
 		"cookie",
@@ -61,6 +75,10 @@ func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier
 
 	if isValidUrl(flagOptions.PrefixUrl) {
 		modifier.With(addPrefixUrlToRequest(flagOptions.PrefixUrl))
+	}
+
+	if len(flagOptions.AuthUsername) > 0 || len(flagOptions.AuthPassword) > 0 {
+		modifier.With(addHttpBasicAuthToRequest(flagOptions))
 	}
 
 	if len(flagOptions.CookieStrings) > 0 {

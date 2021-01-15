@@ -46,3 +46,9 @@ func addHeadersToRequest(flagOptions crawlerFlagOptions) crawler.RequestModifier
 		}
 	}
 }
+
+func addHttpBasicAuthToRequest(flagOptions crawlerFlagOptions) crawler.RequestModifierFunc {
+	return func(req *http.Request) {
+		req.SetBasicAuth(flagOptions.AuthUsername, flagOptions.AuthPassword)
+	}
+}

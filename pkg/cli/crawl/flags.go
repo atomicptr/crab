@@ -11,6 +11,8 @@ type crawlerFlagOptions struct {
 	NumberOfWorkers   int
 	PrefixUrl         string
 	HttpTimeout       time.Duration
+	AuthUsername      string
+	AuthPassword      string
 	CookieStrings     []string
 	HeaderStrings     []string
 	FilterStatusQuery string

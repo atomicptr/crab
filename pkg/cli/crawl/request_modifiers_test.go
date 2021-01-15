@@ -102,3 +102,20 @@ func TestAddHeadersToRequest(t *testing.T) {
 	assert.Equal(t, "c", req.Header.Get("b"))
 	assert.Equal(t, "asdf", req.Header.Get("test"))
 }
+
+func TestAddHttpBasicAuthToRequest(t *testing.T) {
+	modifier := crawler.RequestModifier{}
+	modifier.With(addHttpBasicAuthToRequest(crawlerFlagOptions{
+		AuthUsername: "username",
+		AuthPassword: "password",
+	}))
+
+	req := httptest.NewRequest("GET", "/", strings.NewReader(""))
+	modifier.Do(req)
+
+	username, password, ok := req.BasicAuth()
+
+	assert.True(t, ok)
+	assert.Equal(t, "username", username)
+	assert.Equal(t, "password", password)
+}

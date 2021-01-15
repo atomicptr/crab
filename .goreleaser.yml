@@ -53,7 +53,7 @@ snapcrafts:
 ## Homebrew
 brews:
   - name: crab
-    github:
+    tap:
       owner: atomicptr
       name: homebrew-tools
     folder: Formula

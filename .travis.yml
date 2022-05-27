@@ -13,7 +13,6 @@ before_script:
 - go install github.com/mattn/goveralls@latest
 - curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh
   | sh -s -- -b $(go env GOPATH)/bin v1.46.2
-- sudo snap install snapcraft --classic
 before_install:
 - openssl aes-256-cbc -K $encrypted_164ead62e292_key -iv $encrypted_164ead62e292_iv
   -in snap.login.enc -out snap.login -d
@@ -21,15 +20,15 @@ script:
 - make build
 - go test -v -covermode=count -coverprofile=coverage.out ./...
 - "$(go env GOPATH)/bin/golangci-lint run ./..."
-- "$(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci"
 after_success:
 - git checkout -- go.mod go.sum
 - test -n "$TRAVIS_TAG" && snapcraft login --with snap.login
 - test -n "$TRAVIS_TAG" && docker login -u=atomicptr -p="$DOCKER_PASSWORD"
+- "$(go env GOPATH)/bin/goveralls -coverprofile=coverage.out -service=travis-ci"
 deploy:
 - provider: script
   skip_cleanup: true
-  script: curl -sfL https://goreleaser.com/static/run | bash
+  script: sudo snap install snapcraft --classic && curl -sfL https://goreleaser.com/static/run | bash
   on:
     tags: true
     condition: "$TRAVIS_OS_NAME = linux"

@@ -1,4 +1,5 @@
 # crab
+[![.github/workflows/build.yml](https://github.com/atomicptr/crab/actions/workflows/build.yml/badge.svg)](https://github.com/atomicptr/crab/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/atomicptr/crab)](https://goreportcard.com/report/github.com/atomicptr/crab)
 [![Coverage Status](https://coveralls.io/repos/github/atomicptr/crab/badge.svg?branch=master)](https://coveralls.io/github/atomicptr/crab?branch=master)
 

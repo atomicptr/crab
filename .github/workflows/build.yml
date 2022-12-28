@@ -43,7 +43,9 @@ jobs:
       - name: Release Prep
         run: |
           git checkout -- go.mod go.sum
-          docker login -u=atomicptr -p="$DOCKER_PASSWORD"
+          docker login -u=atomicptr -p="$DOCKER_ACCESS_TOKEN"
+        env:
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
         #if: github.tag != ''
       - name: Release
         uses: goreleaser/goreleaser-action@v4

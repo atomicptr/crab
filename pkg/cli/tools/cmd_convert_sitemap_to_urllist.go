@@ -26,7 +26,7 @@ var ConvertSitemapToUrllistCommand = &cobra.Command{
 
 		sitemapPath := args[0]
 
-		urls, err := sitemap.FetchUrlsFromPath(sitemapPath, &http.Client{Timeout: 30 * time.Second})
+		urls, err := sitemap.FetchUrlsFromPath(sitemapPath, &http.Client{Timeout: 30 * time.Second}, nil)
 		if err != nil {
 			fmt.Printf("Could not read sitemap from %s\n\t%s\n", sitemapPath, err)
 			os.Exit(1)

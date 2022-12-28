@@ -32,7 +32,12 @@ var SitemapCommand = &cobra.Command{
 
 		sitemapPath := args[0]
 
-		urls, err := sitemap.FetchUrlsFromPath(sitemapPath, &http.Client{Timeout: sitemapCommandFlags.HttpTimeout})
+		client := http.Client{Timeout: sitemapCommandFlags.HttpTimeout}
+
+		sitemapModifiers := crawler.RequestModifier{}
+		applySitemapModifiers(&sitemapModifiers, sitemapCommandFlags)
+
+		urls, err := sitemap.FetchUrlsFromPath(sitemapPath, &client, &sitemapModifiers)
 		if err != nil {
 			fmt.Printf("Could not read sitemap from %s\n\t%s\n", sitemapPath, err)
 			os.Exit(1)
@@ -44,6 +49,22 @@ var SitemapCommand = &cobra.Command{
 			os.Exit(1)
 		}
 	},
+}
+
+func applySitemapModifiers(modifier *crawler.RequestModifier, flagOptions crawlerFlagOptions) {
+	modifier.With(addUserAgentToRequest())
+
+	if len(flagOptions.AuthUsername) > 0 || len(flagOptions.AuthPassword) > 0 {
+		modifier.With(addHttpBasicAuthToRequest(flagOptions))
+	}
+
+	if len(flagOptions.CookieStrings) > 0 {
+		modifier.With(addCookiesToRequest(flagOptions))
+	}
+
+	if len(flagOptions.HeaderStrings) > 0 {
+		modifier.With(addHeadersToRequest(flagOptions))
+	}
 }
 
 func init() {

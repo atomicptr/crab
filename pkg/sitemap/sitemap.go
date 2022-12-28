@@ -1,6 +1,7 @@
 package sitemap
 
 import (
+	"github.com/atomicptr/crab/pkg/crawler"
 	"github.com/beevik/etree"
 	"github.com/pkg/errors"
 	"io"
@@ -9,10 +10,10 @@ import (
 	"strings"
 )
 
-func FetchUrlsFromPath(path string, client *http.Client) ([]string, error) {
+func FetchUrlsFromPath(path string, client *http.Client, modifier *crawler.RequestModifier) ([]string, error) {
 	var urls []string
 
-	xmlDataBlob, err := fetchXml(path, client)
+	xmlDataBlob, err := fetchXml(path, client, modifier)
 	if err != nil {
 		return nil, err
 	}
@@ -29,7 +30,7 @@ func FetchUrlsFromPath(path string, client *http.Client) ([]string, error) {
 		for _, sitemap := range sitemapIndex.ChildElements() {
 			loc := sitemap.FindElement("loc")
 			if loc != nil {
-				sitemapUrls, err := FetchUrlsFromPath(loc.Text(), client)
+				sitemapUrls, err := FetchUrlsFromPath(loc.Text(), client, modifier)
 				if err != nil {
 					return nil, err
 				}
@@ -54,15 +55,24 @@ func FetchUrlsFromPath(path string, client *http.Client) ([]string, error) {
 	return urls, nil
 }
 
-func fetchXml(path string, client *http.Client) (io.Reader, error) {
+func fetchXml(path string, client *http.Client, modifier *crawler.RequestModifier) (io.Reader, error) {
 	if strings.HasPrefix(path, "http") {
-		return fetchXmlFromWeb(path, client)
+		return fetchXmlFromWeb(path, client, modifier)
 	}
 	return fetchXmlFromFile(path)
 }
 
-func fetchXmlFromWeb(path string, client *http.Client) (io.Reader, error) {
-	resp, err := client.Get(path)
+func fetchXmlFromWeb(path string, client *http.Client, modifier *crawler.RequestModifier) (io.Reader, error) {
+	req, err := http.NewRequest("GET", path, nil)
+	if err != nil {
+		return nil, err
+	}
+
+	if modifier != nil {
+		modifier.Do(req)
+	}
+
+	resp, err := client.Do(req)
 	if err != nil {
 		return nil, err
 	}

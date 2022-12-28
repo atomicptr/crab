@@ -26,14 +26,6 @@ $ docker run --rm atomicptr/crab --help
 $ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
 ```
 
-### Snap
-
-```bash
-$ snap install crab
-```
-
-[![Get it from the Snap Store](https://snapcraft.io/static/images/badges/en/snap-store-black.svg)](https://snapcraft.io/crab)
-
 ### Homebrew
 
 ```bash

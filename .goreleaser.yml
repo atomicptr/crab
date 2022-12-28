@@ -36,21 +36,6 @@ release:
     owner: atomicptr
     name: crab
   draft: false
-## Snap
-snapcrafts:
-  - name: crab
-    publish: true
-    summary: A versatile tool to crawl dozens of URLs from a given source.
-    description: |
-      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
-    grade: stable
-    confinement: strict
-    license: MIT
-    base: core18
-    apps:
-      crab:
-        command: crab
-        plugs: ["network"]
 ## Homebrew
 brews:
   - name: crab

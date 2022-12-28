@@ -35,11 +35,6 @@ jobs:
         uses: shogo82148/actions-goveralls@v1
         with:
           path-to-profile: coverage.out
-      - name: Install Snapcraft
-        uses: samuelmeuli/action-snapcraft@v1
-        env:
-          SNAPCRAFT_STORE_CREDENTIALS: ${{ secrets.SNAPCRAFT_TOKEN }}
-        if: ${{ startsWith(github.ref, 'refs/tags/v') }}
       - name: Release Prep
         run: |
           git checkout -- go.mod go.sum

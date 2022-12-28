@@ -39,18 +39,18 @@ jobs:
         uses: samuelmeuli/action-snapcraft@v1
         with:
           snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
-        if: github.tag != ''
+        #if: github.tag != ''
       - name: Release Prep
         run: |
           git checkout -- go.mod go.sum
           docker login -u=atomicptr -p="$DOCKER_PASSWORD"
-        if: github.tag != ''
+        #if: github.tag != ''
       - name: Release
         uses: goreleaser/goreleaser-action@v4
         with:
           distribution: goreleaser
           version: latest
-          args: release --rm-dist
+          args: release --rm-dist --skip-validation --skip-publish
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        if: github.tag != ''
+        #if: github.tag != ''

@@ -1,5 +1,4 @@
 # crab
-[![Travis CI](https://api.travis-ci.com/atomicptr/crab.svg?branch=master)](https://travis-ci.com/atomicptr/crab)
 [![Go Report Card](https://goreportcard.com/badge/github.com/atomicptr/crab)](https://goreportcard.com/report/github.com/atomicptr/crab)
 [![Coverage Status](https://coveralls.io/repos/github/atomicptr/crab/badge.svg?branch=master)](https://coveralls.io/github/atomicptr/crab?branch=master)
 

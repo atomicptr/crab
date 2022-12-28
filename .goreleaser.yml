@@ -49,6 +49,7 @@ snapcrafts:
     base: core18
     apps:
       crab:
+        command: crab
         plugs: ["network"]
 ## Homebrew
 brews:

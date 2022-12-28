@@ -1,0 +1,58 @@
+on:
+  push:
+    tags:
+      - '*'
+    branches:
+      - master
+  pull_request:
+    types:
+      - opened
+      - synchronize
+
+permissions:
+  contents: write
+
+jobs:
+  tests:
+    name: CI Tests & Release
+    runs-on: ubuntu-latest
+    environment: CI
+    steps:
+      - uses: actions/checkout@v3
+      - uses: actions/setup-go@v3
+        with:
+          go-version: '^1.19'
+      - name: Install Dependencies
+        run: |
+          go install github.com/mattn/goveralls@latest
+          curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b $(go env GOPATH)/bin v1.50.1
+      - name: Build & Test
+        run: |
+          make build
+          go test -v -covermode=count -coverprofile=coverage.out ./...
+          $(go env GOPATH)/bin/golangci-lint run ./...
+      - name: Goveralls
+        uses: shogo82148/actions-goveralls@v1
+        with:
+          path-to-profile: coverage.out
+      - name: Install Snapcraft
+        uses: samuelmeuli/action-snapcraft@v1
+        with:
+          snapcraft_token: ${{ secrets.SNAPCRAFT_TOKEN }}
+        if: github.tag != ''
+      - name: Release Prep
+        run: |
+          git checkout -- go.mod go.sum
+          docker login -u=atomicptr -p="$DOCKER_ACCESS_TOKEN"
+        env:
+          DOCKER_ACCESS_TOKEN: ${{ secrets.DOCKER_ACCESS_TOKEN }}
+        if: github.tag != ''
+      - name: Release
+        uses: goreleaser/goreleaser-action@v4
+        with:
+          distribution: goreleaser
+          version: latest
+          args: release --rm-dist
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        if: github.tag != ''

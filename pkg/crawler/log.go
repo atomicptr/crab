@@ -4,6 +4,9 @@ import (
 	"encoding/base64"
 	"encoding/json"
 	"fmt"
+	"log"
+	"os"
+	"path/filepath"
 	"time"
 
 	"github.com/atomicptr/crab/pkg/filter"
@@ -17,7 +20,21 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
 		c.printMutex.Lock()
+		// Console log
 		_, _ = fmt.Fprintln(c.OutWriter, message)
+
+		// Write Json File if OutputJson flag is set
+		if c.OutputJson != "" {
+			c.writeJsonFile(message, c.OutputJson)
+		}
+
+		var url string
+		var data map[string]interface{}
+		if err := json.Unmarshal([]byte(message), &data); err != nil {
+			log.Fatal(err)
+		}
+		url = data["url"].(string)
+		c.writeToFileLine(url, c.OutputFile)
 		c.printMutex.Unlock()
 	}
 }
@@ -55,4 +72,73 @@ func escapeString(str string) string {
 		return "base64:" + bStr
 	}
 	return string(b)
+}
+
+// Check File path and create if not exists
+func (c *Crawler) checkFileAndCreate(filePath string) {
+	// Check directory and create if not exists
+	dir := filepath.Dir(filePath)
+	if _, err := os.Stat(dir); os.IsNotExist(err) {
+		err := os.MkdirAll(dir, 0755)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+	// Check file and create if not exists
+	if _, err := os.Stat(filePath); os.IsNotExist(err) {
+		_, err := os.Create(filePath)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+}
+
+// Write files to the output writer
+func (c *Crawler) writeToFileLine(url, filePath string) {
+	// filePath check and create
+	c.checkFileAndCreate(filePath)
+
+	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
+	defer file.Close()
+
+	_, err = file.WriteString(url + "\n")
+	if err != nil {
+		log.Fatal(err)
+	}
+}
+
+// Write json files to array output
+func (c *Crawler) writeJsonFile(message interface{}, filePath string) {
+	// filePath check and create
+	c.checkFileAndCreate(filePath)
+
+	file, err := os.ReadFile(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	// file is empty create a new array
+	if len(file) == 0 {
+		file = []byte("[]")
+	}
+
+	var temp []interface{}
+	if err := json.Unmarshal(file, &temp); err != nil {
+		log.Fatal(err)
+	}
+
+	temp = append(temp, message)
+
+	jsonData, err := json.Marshal(temp)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	err = os.WriteFile(filePath, jsonData, 0644)
+	if err != nil {
+		log.Fatal(err)
+	}
 }

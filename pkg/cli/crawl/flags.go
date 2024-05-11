@@ -18,17 +18,21 @@ type crawlerFlagOptions struct {
 	FilterStatusQuery string
 	cookieMap         map[string]string
 	headerMap         map[string]string
+	OutputFile        string
+	OutputJson        string
 }
 
 const (
 	defaultNumberOfWorkers = 4
 	defaultHttpTimeout     = 30 * time.Second
+	defaultOutputFile      = "./output/output.txt"
 )
 
 func newCrawlerFlagOptions() crawlerFlagOptions {
 	return crawlerFlagOptions{
 		NumberOfWorkers: defaultNumberOfWorkers,
 		HttpTimeout:     defaultHttpTimeout,
+		OutputFile:      defaultOutputFile,
 	}
 }
 

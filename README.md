@@ -16,6 +16,16 @@ Useful for:
 
 [You can download the newest release from here for Linux (including .deb and .rpm), macOS and Windows.](https://github.com/atomicptr/crab/releases/)
 
+### Build Command (Personal & Development Usage)
+
+```bash
+#Linux (Debian/Ubuntu) & MacOS
+$ go build -o crab cmd/crab/main.go
+
+#Windows
+$ go build -o crab.exe cmd/crab/main.go
+```
+
 ### Docker
 
 [Docker Hub](https://hub.docker.com/r/atomicptr/crab)
@@ -85,6 +95,24 @@ $ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=200,404
 $ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=>500
 ```
 
+### Save Url List in File
+
+You can save the url list to a file
+
+```bash
+# This will save the output to a file called urls.txt
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-file urls.txt
+```
+
+### Save Output to JSON
+
+You can save the output to a JSON file
+
+```bash
+# This will save the output to a file called output.json
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-json ./output.json
+```
+
 ## License
 
-MIT
+[MIT](./LICENSE)

@@ -10,7 +10,7 @@ import (
 	"github.com/pkg/errors"
 )
 
-//Crawler crawls urls in parallel
+// Crawler crawls urls in parallel
 type Crawler struct {
 	HttpClient        http.Client
 	NumberOfWorkers   int
@@ -18,9 +18,11 @@ type Crawler struct {
 	OutWriter         io.Writer
 	statusFilter      *filter.Filter
 	printMutex        sync.Mutex
+	OutputFile        string
+	OutputJson        string
 }
 
-//Crawl crawls a list of HTTP requests with a set number of workers
+// Crawl crawls a list of HTTP requests with a set number of workers
 func (c *Crawler) Crawl(requests []*http.Request) {
 	requestNum := len(requests)
 

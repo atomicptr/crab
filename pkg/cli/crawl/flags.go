@@ -25,14 +25,12 @@ type crawlerFlagOptions struct {
 const (
 	defaultNumberOfWorkers = 4
 	defaultHttpTimeout     = 30 * time.Second
-	defaultOutputFile      = "./output/output.txt"
 )
 
 func newCrawlerFlagOptions() crawlerFlagOptions {
 	return crawlerFlagOptions{
 		NumberOfWorkers: defaultNumberOfWorkers,
 		HttpTimeout:     defaultHttpTimeout,
-		OutputFile:      defaultOutputFile,
 	}
 }
 

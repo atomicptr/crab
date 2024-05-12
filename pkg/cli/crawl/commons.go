@@ -72,7 +72,7 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		&flagOptions.OutputFile,
 		"output-file",
 		"",
-		defaultOutputFile,
+		"",
 		"set output file for urls",
 	)
 	cmd.PersistentFlags().StringVarP(

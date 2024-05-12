@@ -20,21 +20,31 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
 		c.printMutex.Lock()
-		// Console log
 		_, _ = fmt.Fprintln(c.OutWriter, message)
 
 		// Write Json File if OutputJson flag is set
 		if c.OutputJson != "" {
 			c.writeJsonFile(message, c.OutputJson)
-		}
+		} else {
+			// Write to file if OutputFile flag is set
+			if c.OutputFile != "" {
+				var status float64
+				var url string
+				var time float64
+				var duration float64
 
-		var url string
-		var data map[string]interface{}
-		if err := json.Unmarshal([]byte(message), &data); err != nil {
-			log.Fatal(err)
+				var data map[string]interface{}
+				if err := json.Unmarshal([]byte(message), &data); err != nil {
+					log.Fatal(err)
+				}
+				status = data["status"].(float64)
+				url = data["url"].(string)
+				time = data["time"].(float64)
+				duration = data["duration"].(float64)
+
+				c.writeLineToFIle(fmt.Sprintf("%d %s %d %d", int(status), url, int(time), int(duration)), c.OutputFile)
+			}
 		}
-		url = data["url"].(string)
-		c.writeToFileLine(url, c.OutputFile)
 		c.printMutex.Unlock()
 	}
 }
@@ -94,7 +104,7 @@ func (c *Crawler) checkFileAndCreate(filePath string) {
 }
 
 // Write files to the output writer
-func (c *Crawler) writeToFileLine(url, filePath string) {
+func (c *Crawler) writeLineToFIle(url, filePath string) {
 	// filePath check and create
 	c.checkFileAndCreate(filePath)
 

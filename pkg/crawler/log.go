@@ -7,6 +7,7 @@ import (
 	"log"
 	"os"
 	"path/filepath"
+	"reflect"
 	"time"
 
 	"github.com/atomicptr/crab/pkg/filter"
@@ -51,11 +52,12 @@ func (c *Crawler) log(statusCode int, url string, duration time.Duration) {
 // logError logs a json log with an error, url, timestamp and duration of the request
 func (c *Crawler) logError(err error, url string, duration time.Duration) {
 	message := fmt.Sprintf(
-		`{"err": %s, "url": "%s", "time": %d, "duration": %d}`,
-		escapeString(err.Error()),
+		`{"status": %d, "url": "%s", "time": %d, "duration": %d, "error": %s}`,
+		218,
 		url,
 		time.Now().Unix(),
 		duration.Milliseconds(),
+		escapeString(err.Error()),
 	)
 	c.safePrintln(218, message)
 }
@@ -101,6 +103,7 @@ func (c *Crawler) writeLineToFIle(message, filePath string) {
 	}
 	defer file.Close()
 
+	var error string
 	var status float64
 	var url string
 	var time float64
@@ -111,12 +114,21 @@ func (c *Crawler) writeLineToFIle(message, filePath string) {
 		log.Fatal(err)
 	}
 
-	status = data["status"].(float64)
-	url = data["url"].(string)
-	time = data["time"].(float64)
-	duration = data["duration"].(float64)
+	if reflect.TypeOf(data["url"]) != nil || reflect.TypeOf(data["time"]) != nil || reflect.TypeOf(data["duration"]) != nil {
+		status = data["status"].(float64)
+		url = data["url"].(string)
+		time = data["time"].(float64)
+		duration = data["duration"].(float64)
 
-	_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", int(status), url, int(time), int(duration)) + "\n")
+		if reflect.TypeOf(data["error"]) != nil && data["error"] != "" {
+			error = data["error"].(string)
+			_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d\t%s", int(status), url, int(time), int(duration), error) + "\n")
+		} else {
+			_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", int(status), url, int(time), int(duration)) + "\n")
+		}
+	} else {
+		_, err = file.WriteString(message + "\n")
+	}
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -144,7 +156,7 @@ func (c *Crawler) writeJsonFile(message interface{}, filePath string) {
 
 	temp = append(temp, message)
 
-	jsonData, err := json.MarshalIndent(temp, "", "  ")
+	jsonData, err := json.MarshalIndent(temp, "", "\t")
 	if err != nil {
 		log.Fatal(err)
 	}

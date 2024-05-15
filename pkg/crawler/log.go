@@ -20,32 +20,19 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
 		c.printMutex.Lock()
-		_, _ = fmt.Fprintln(c.OutWriter, message)
 
 		// Write Json File if OutputJson flag is set
 		if c.OutputJson != "" {
 			c.writeJsonFile(message, c.OutputJson)
-		} else {
-			// Write to file if OutputFile flag is set
-			if c.OutputFile != "" {
-				var status float64
-				var url string
-				var time float64
-				var duration float64
+		}
 
-				var data map[string]interface{}
-				if err := json.Unmarshal([]byte(message), &data); err != nil {
-					log.Fatal(err)
-				}
-				status = data["status"].(float64)
-				url = data["url"].(string)
-				time = data["time"].(float64)
-				duration = data["duration"].(float64)
-
-				c.writeLineToFIle(fmt.Sprintf("%d %s %d %d", int(status), url, int(time), int(duration)), c.OutputFile)
-			}
+		// Write to file if OutputFile flag is set
+		if c.OutputFile != "" {
+			c.writeLineToFIle(message, c.OutputFile)
 		}
 		c.printMutex.Unlock()
+
+		_, _ = fmt.Fprintln(c.OutWriter, message)
 	}
 }
 
@@ -104,7 +91,7 @@ func (c *Crawler) checkFileAndCreate(filePath string) {
 }
 
 // Write files to the output writer
-func (c *Crawler) writeLineToFIle(url, filePath string) {
+func (c *Crawler) writeLineToFIle(message, filePath string) {
 	// filePath check and create
 	c.checkFileAndCreate(filePath)
 
@@ -114,7 +101,22 @@ func (c *Crawler) writeLineToFIle(url, filePath string) {
 	}
 	defer file.Close()
 
-	_, err = file.WriteString(url + "\n")
+	var status float64
+	var url string
+	var time float64
+	var duration float64
+
+	var data map[string]interface{}
+	if err := json.Unmarshal([]byte(message), &data); err != nil {
+		log.Fatal(err)
+	}
+
+	status = data["status"].(float64)
+	url = data["url"].(string)
+	time = data["time"].(float64)
+	duration = data["duration"].(float64)
+
+	_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", int(status), url, int(time), int(duration)) + "\n")
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -142,7 +144,7 @@ func (c *Crawler) writeJsonFile(message interface{}, filePath string) {
 
 	temp = append(temp, message)
 
-	jsonData, err := json.Marshal(temp)
+	jsonData, err := json.MarshalIndent(temp, "", "  ")
 	if err != nil {
 		log.Fatal(err)
 	}

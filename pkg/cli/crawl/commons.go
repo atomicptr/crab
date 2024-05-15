@@ -73,7 +73,7 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		"output-file",
 		"",
 		"",
-		"set output file for urls",
+		"set output file for results in text format (example: \"./dirName/subDirName/output.txt\" or \"output.txt\")",
 	)
 	cmd.PersistentFlags().StringVarP(
 		&flagOptions.OutputJson,

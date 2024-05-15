@@ -100,8 +100,8 @@ $ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=>500
 You can save the url list to a file
 
 ```bash
-# This will save the output to a file called urls.txt
-$ crab crawl:sitemap https://domain.com/sitemap.xml --output-file urls.txt
+# This will save the output to a file called output.txt
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-file ./output/output.txt
 ```
 
 ### Save Output to JSON
@@ -110,7 +110,7 @@ You can save the output to a JSON file
 
 ```bash
 # This will save the output to a file called output.json
-$ crab crawl:sitemap https://domain.com/sitemap.xml --output-json ./output.json
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-json ./output/output.json
 ```
 
 ## License

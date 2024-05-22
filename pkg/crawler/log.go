@@ -7,7 +7,6 @@ import (
 	"log"
 	"os"
 	"path/filepath"
-	"reflect"
 	"time"
 
 	"github.com/atomicptr/crab/pkg/filter"
@@ -29,7 +28,7 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 		// Write to file if OutputFile flag is set
 		if c.OutputFile != "" {
-			c.writeLineToFIle(message, c.OutputFile)
+			c.writeLineToFile(message, c.OutputFile)
 		}
 		c.printMutex.Unlock()
 
@@ -52,12 +51,11 @@ func (c *Crawler) log(statusCode int, url string, duration time.Duration) {
 // logError logs a json log with an error, url, timestamp and duration of the request
 func (c *Crawler) logError(err error, url string, duration time.Duration) {
 	message := fmt.Sprintf(
-		`{"status": %d, "url": "%s", "time": %d, "duration": %d, "error": %s}`,
-		218,
+		`{"err": %s, "url": "%s", "time": %d, "duration": %d}`,
+		escapeString(err.Error()),
 		url,
 		time.Now().Unix(),
 		duration.Milliseconds(),
-		escapeString(err.Error()),
 	)
 	c.safePrintln(218, message)
 }
@@ -93,7 +91,7 @@ func (c *Crawler) checkFileAndCreate(filePath string) {
 }
 
 // Write files to the output writer
-func (c *Crawler) writeLineToFIle(message, filePath string) {
+func (c *Crawler) writeLineToFile(message, filePath string) {
 	// filePath check and create
 	c.checkFileAndCreate(filePath)
 
@@ -103,34 +101,33 @@ func (c *Crawler) writeLineToFIle(message, filePath string) {
 	}
 	defer file.Close()
 
-	var error string
-	var status float64
-	var url string
-	var time float64
-	var duration float64
-
-	var data map[string]interface{}
+	data := struct {
+		Err      string
+		Status   int
+		Url      string
+		Time     int
+		Duration int
+	}{}
 	if err := json.Unmarshal([]byte(message), &data); err != nil {
 		log.Fatal(err)
 	}
 
-	if reflect.TypeOf(data["url"]) != nil || reflect.TypeOf(data["time"]) != nil || reflect.TypeOf(data["duration"]) != nil {
-		status = data["status"].(float64)
-		url = data["url"].(string)
-		time = data["time"].(float64)
-		duration = data["duration"].(float64)
+	Err := data.Err
+	Status := data.Status
+	Url := data.Url
+	Time := data.Time
+	Duration := data.Duration
 
-		if reflect.TypeOf(data["error"]) != nil && data["error"] != "" {
-			error = data["error"].(string)
-			_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d\t%s", int(status), url, int(time), int(duration), error) + "\n")
-		} else {
-			_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", int(status), url, int(time), int(duration)) + "\n")
+	if Err != "" {
+		_, err = file.WriteString(fmt.Sprintf("%s\t%s\t%d\t%d", Err, Url, Time, Duration) + "\n")
+		if err != nil {
+			log.Fatal(err)
 		}
 	} else {
-		_, err = file.WriteString(message + "\n")
-	}
-	if err != nil {
-		log.Fatal(err)
+		_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", Status, Url, Time, Duration) + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
 	}
 }
 

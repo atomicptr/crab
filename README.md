@@ -1,4 +1,5 @@
 # crab
+
 [![.github/workflows/build.yml](https://github.com/atomicptr/crab/actions/workflows/build.yml/badge.svg)](https://github.com/atomicptr/crab/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/atomicptr/crab)](https://goreportcard.com/report/github.com/atomicptr/crab)
 [![Coverage Status](https://coveralls.io/repos/github/atomicptr/crab/badge.svg?branch=master)](https://coveralls.io/github/atomicptr/crab?branch=master)
@@ -6,6 +7,7 @@
 A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
 
 Useful for:
+
 * Warming site caches
 * Checking response times
 * Identifying dead or broken pages

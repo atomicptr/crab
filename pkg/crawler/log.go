@@ -106,7 +106,12 @@ func (c *Crawler) writeLineToFile(message, filePath string) {
 	if err != nil {
 		log.Fatal(err)
 	}
-	defer file.Close()
+	defer func() {
+		err := file.Close()
+		if err != nil {
+			log.Fatal(err)
+		}
+	}()
 
 	data := struct {
 		Err      string

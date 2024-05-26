@@ -13,12 +13,7 @@ builds:
   goarch:
     - amd64
 archives:
-- replacements:
-    darwin: Darwin
-    linux: Linux
-    windows: Windows
-    386: i386
-    amd64: x86_64
+  - id: default
 checksum:
   name_template: 'checksums.txt'
 snapshot:
@@ -39,22 +34,23 @@ release:
 ## Homebrew
 brews:
   - name: crab
-    tap:
+    repository:
       owner: atomicptr
       name: homebrew-tools
-    folder: Formula
+    directory: Formula
     homepage: "https://github.com/atomicptr/crab"
     description: |
       A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
 ## Scoop
-scoop:
-  bucket:
-    owner: atomicptr
-    name: scoop-bucket
-  homepage: "https://github.com/atomicptr/crab"
-  description: |
-    A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
-  license: MIT
+scoops:
+  - name: crab
+    repository:
+      owner: atomicptr
+      name: scoop-bucket
+    homepage: "https://github.com/atomicptr/crab"
+    description: |
+      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+    license: MIT
 ## Docker
 dockers:
   - dockerfile: Dockerfile

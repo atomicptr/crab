@@ -1,4 +1,5 @@
 # crab
+
 [![.github/workflows/build.yml](https://github.com/atomicptr/crab/actions/workflows/build.yml/badge.svg)](https://github.com/atomicptr/crab/actions/workflows/build.yml)
 [![Go Report Card](https://goreportcard.com/badge/github.com/atomicptr/crab)](https://goreportcard.com/report/github.com/atomicptr/crab)
 [![Coverage Status](https://coveralls.io/repos/github/atomicptr/crab/badge.svg?branch=master)](https://coveralls.io/github/atomicptr/crab?branch=master)
@@ -6,6 +7,7 @@
 A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
 
 Useful for:
+
 * Warming site caches
 * Checking response times
 * Identifying dead or broken pages
@@ -15,6 +17,16 @@ Useful for:
 ### Binaries
 
 [You can download the newest release from here for Linux (including .deb and .rpm), macOS and Windows.](https://github.com/atomicptr/crab/releases/)
+
+### Build Command (Personal & Development Usage)
+
+```bash
+#Linux (Debian/Ubuntu) & MacOS
+$ go build -o crab cmd/crab/main.go
+
+#Windows
+$ go build -o crab.exe cmd/crab/main.go
+```
 
 ### Docker
 
@@ -85,6 +97,24 @@ $ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=200,404
 $ crab crawl:sitemap https://domain.com/sitemap.xml --filter-status=>500
 ```
 
+### Save Url List in File
+
+You can save the url list to a file
+
+```bash
+# This will save the output to a file called output.txt
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-file ./output/output.txt
+```
+
+### Save Output to JSON
+
+You can save the output to a JSON file
+
+```bash
+# This will save the output to a file called output.json
+$ crab crawl:sitemap https://domain.com/sitemap.xml --output-json ./output/output.json
+```
+
 ## License
 
-MIT
+[MIT](./LICENSE)

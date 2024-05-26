@@ -68,6 +68,20 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		"",
 		"filter logs by status",
 	)
+	cmd.PersistentFlags().StringVarP(
+		&flagOptions.OutputFile,
+		"output-file",
+		"",
+		"",
+		"set output file for results in text format (example: \"./path/to/output.txt\")",
+	)
+	cmd.PersistentFlags().StringVarP(
+		&flagOptions.OutputJson,
+		"output-json",
+		"",
+		"",
+		"set output file for results in json format (example: \"./path/to/output.json\")",
+	)
 }
 
 func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier, flagOptions crawlerFlagOptions) {
@@ -110,6 +124,8 @@ func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions craw
 		},
 		FilterStatusQuery: flagOptions.FilterStatusQuery,
 		OutWriter:         outWriter,
+		OutputFile:        flagOptions.OutputFile,
+		OutputJson:        flagOptions.OutputJson,
 	}
 	crawl.Crawl(requests)
 

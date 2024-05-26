@@ -18,6 +18,8 @@ type crawlerFlagOptions struct {
 	FilterStatusQuery string
 	cookieMap         map[string]string
 	headerMap         map[string]string
+	OutputFile        string
+	OutputJson        string
 }
 
 const (

@@ -20,17 +20,24 @@ func (c *Crawler) safePrintln(statusCode int, message string) {
 
 	if c.statusFilter.IsValid(c.FilterStatusQuery, int64(statusCode)) {
 		c.printMutex.Lock()
+		defer c.printMutex.Unlock()
 
-		// Write Json File if OutputJson flag is set
+		logsToFile := false
+
 		if c.OutputJson != "" {
-			c.writeJsonFile(message, c.OutputJson)
+			c.writeLineToJsonFile(message, c.OutputJson)
+			logsToFile = true
 		}
 
-		// Write to file if OutputFile flag is set
 		if c.OutputFile != "" {
 			c.writeLineToFile(message, c.OutputFile)
+			logsToFile = true
 		}
-		c.printMutex.Unlock()
+
+		// dont log to stdout if we log to file
+		if logsToFile {
+			return
+		}
 
 		_, _ = fmt.Fprintln(c.OutWriter, message)
 	}
@@ -71,29 +78,29 @@ func escapeString(str string) string {
 	return string(b)
 }
 
-// Check File path and create if not exists
-func (c *Crawler) checkFileAndCreate(filePath string) {
-	// Check directory and create if not exists
-	dir := filepath.Dir(filePath)
-	if _, err := os.Stat(dir); os.IsNotExist(err) {
-		err := os.MkdirAll(dir, 0755)
-		if err != nil {
-			log.Fatal(err)
-		}
+// assureFileExists Check if file path exists and create the file otherwise
+func (c *Crawler) assureFileExists(filePath string) error {
+	err := os.MkdirAll(filepath.Dir(filePath), 0755)
+	if err != nil {
+		return err
 	}
-	// Check file and create if not exists
+
 	if _, err := os.Stat(filePath); os.IsNotExist(err) {
 		_, err := os.Create(filePath)
 		if err != nil {
-			log.Fatal(err)
+			return err
 		}
 	}
+
+	return nil
 }
 
-// Write files to the output writer
+// writeLineToFile Writes message to file
 func (c *Crawler) writeLineToFile(message, filePath string) {
-	// filePath check and create
-	c.checkFileAndCreate(filePath)
+	err := c.assureFileExists(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	file, err := os.OpenFile(filePath, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
@@ -112,46 +119,48 @@ func (c *Crawler) writeLineToFile(message, filePath string) {
 		log.Fatal(err)
 	}
 
-	Err := data.Err
-	Status := data.Status
-	Url := data.Url
-	Time := data.Time
-	Duration := data.Duration
+	if data.Err != "" {
+		_, err = file.WriteString(fmt.Sprintf("%s\t%s\t%d\t%dms", data.Err, data.Url, data.Time, data.Duration) + "\n")
+		if err != nil {
+			log.Fatal(err)
+		}
 
-	if Err != "" {
-		_, err = file.WriteString(fmt.Sprintf("%s\t%s\t%d\t%d", Err, Url, Time, Duration) + "\n")
-		if err != nil {
-			log.Fatal(err)
-		}
-	} else {
-		_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%d", Status, Url, Time, Duration) + "\n")
-		if err != nil {
-			log.Fatal(err)
-		}
+		return
+	}
+
+	_, err = file.WriteString(fmt.Sprintf("%d\t%s\t%d\t%dms", data.Status, data.Url, data.Time, data.Duration) + "\n")
+	if err != nil {
+		log.Fatal(err)
 	}
 }
 
-// Write json files to array output
-func (c *Crawler) writeJsonFile(message interface{}, filePath string) {
-	// filePath check and create
-	c.checkFileAndCreate(filePath)
+// writeJsonFile Write message to json file
+func (c *Crawler) writeLineToJsonFile(message, filePath string) {
+	err := c.assureFileExists(filePath)
+	if err != nil {
+		log.Fatal(err)
+	}
 
 	file, err := os.ReadFile(filePath)
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	// file is empty create a new array
 	if len(file) == 0 {
 		file = []byte("[]")
 	}
 
-	var temp []interface{}
+	var temp []map[string]interface{}
 	if err := json.Unmarshal(file, &temp); err != nil {
 		log.Fatal(err)
 	}
 
-	temp = append(temp, message)
+	var msg map[string]interface{}
+	if err := json.Unmarshal([]byte(message), &msg); err != nil {
+		log.Fatal(err)
+	}
+
+	temp = append(temp, msg)
 
 	jsonData, err := json.MarshalIndent(temp, "", "\t")
 	if err != nil {

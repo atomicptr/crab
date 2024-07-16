@@ -1,3 +1,5 @@
+version: 2
+
 builds:
 - main: ./cmd/crab/main.go
   ldflags:
@@ -24,13 +26,34 @@ changelog:
     exclude:
     - '^docs:'
     - '^test:'
+
 # Release
+
 ## Github Releases
 release:
   github:
     owner: atomicptr
     name: crab
   draft: false
+
+
+## AUR
+aurs:
+  - name: crab-bin
+    homepage: &homepage "https://github.com/atomicptr/crab"
+    description: &description |
+      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+    private_key: "{{ .Env.AUR_KEY }}"
+    git_url: "ssh://aur@aur.archlinux.org/crab-bin.git"
+    provides:
+      - tmplr
+    commit_author:
+      name: Christopher Kaster
+      email: me@atomicptr.de
+    maintainers: &maintainers
+      - &maintainer "Christopher Kaster <me@atomicptr.de>"
+    license: &license MIT
+
 ## Homebrew
 brews:
   - name: crab
@@ -38,19 +61,19 @@ brews:
       owner: atomicptr
       name: homebrew-tools
     directory: Formula
-    homepage: "https://github.com/atomicptr/crab"
-    description: |
-      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+    homepage: *homepage
+    description: *description
+
 ## Scoop
 scoops:
   - name: crab
     repository:
       owner: atomicptr
       name: scoop-bucket
-    homepage: "https://github.com/atomicptr/crab"
-    description: |
-      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
-    license: MIT
+    homepage: *homepage
+    description: *description
+    license: *license
+
 ## Docker
 dockers:
   - dockerfile: Dockerfile
@@ -59,14 +82,14 @@ dockers:
       - "atomicptr/crab:v{{.Major}}"
       - "atomicptr/crab:v{{.Major}}.{{.Minor}}"
       - "atomicptr/crab:{{.Tag}}"
+
 ## NFPM (deb and rpm)
 nfpms:
   - package_name: crab
     vendor: atomicptr
-    maintainer: "Christopher Kaster <me@atomicptr.de>"
-    homepage: "https://github.com/atomicptr/crab"
-    description: |
-      A versatile tool to crawl dozens of URLs from a given source, like a sitemap or an URL list.
+    maintainer: *maintainer
+    homepage: *homepage
+    description: *description
     license: MIT
     formats:
       - deb

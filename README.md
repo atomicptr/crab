@@ -39,6 +39,10 @@ $ docker run --rm atomicptr/crab --help
 $ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
 ```
 
+### Arch Linux
+
+[AUR](https://aur.archlinux.org/packages/crab-bin)
+
 ### Homebrew
 
 ```bash

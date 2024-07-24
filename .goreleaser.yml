@@ -36,7 +36,6 @@ release:
     name: crab
   draft: false
 
-
 ## AUR
 aurs:
   - name: crab-bin
@@ -53,6 +52,18 @@ aurs:
     maintainers: &maintainers
       - &maintainer "Christopher Kaster <me@atomicptr.de>"
     license: &license MIT
+
+## Nix:
+nix:
+  - name: crab
+    repository:
+      owner: atomicptr
+      name: nix
+      branch: master
+      token: "{{ .Env.GITHUB_TOKEN }}"
+    homepage: *homepage
+    description: *description
+    license: mit
 
 ## Homebrew
 brews:

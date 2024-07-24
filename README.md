@@ -43,6 +43,21 @@ $ docker run --rm atomicptr/crab crawl:sitemap https://domain.com/sitemap.xml
 
 [AUR](https://aur.archlinux.org/packages/crab-bin)
 
+### Nix
+
+Not available in nixpkgs but I have my own nix repository which you can use:
+
+```nix
+let
+  atomicptr = import (fetchTarball "https://github.com/atomicptr/nix/archive/refs/heads/master.tar.gz") {};
+in
+{
+  environment.systemPackages = with pkgs; [
+    atomicptr.crab
+  ];
+}
+````
+
 ### Homebrew
 
 ```bash

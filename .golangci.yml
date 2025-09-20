@@ -1,39 +1,44 @@
----
-linters-settings:
-  dupl:
-    threshold: 100
-  funlen:
-    lines: 100
-    statements: 50
-  goconst:
-    min-len: 2
-    min-occurrences: 2
-  gocritic:
-    enabled-tags:
-      - diagnostic
-      - experimental
-      - opinionated
-      - performance
-      - style
-    disabled-checks:
-  gocyclo:
-    min-complexity: 15
-  goimports:
-    local-prefixes: github.com/atomicptr/crab
-  golint:
-    min-confidence: 0.8
-  lll:
-    line-length: 120
-  maligned:
-    suggest-new: true
-  misspell:
-    locale: US
-
-run:
-  timeout: 5m
-
+version: "2"
+linters:
+  settings:
+    dupl:
+      threshold: 100
+    funlen:
+      lines: 100
+      statements: 50
+    goconst:
+      min-len: 2
+      min-occurrences: 2
+    gocritic:
+      enabled-tags:
+        - diagnostic
+        - experimental
+        - opinionated
+        - performance
+        - style
+    gocyclo:
+      min-complexity: 15
+    lll:
+      line-length: 120
+    misspell:
+      locale: US
+  exclusions:
+    generated: lax
+    paths:
+      - test
+      - third_party$
+      - builtin$
+      - examples$
 issues:
   max-same-issues: 0
-  exclude-use-default: false
-  exclude-dirs:
-    - test
+formatters:
+  settings:
+    goimports:
+      local-prefixes:
+        - github.com/atomicptr/crab
+  exclusions:
+    generated: lax
+    paths:
+      - third_party$
+      - builtin$
+      - examples$

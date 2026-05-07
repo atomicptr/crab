@@ -1,6 +1,7 @@
 package crawl
 
 import (
+	"crypto/tls"
 	"fmt"
 	"io"
 	"net/http"
@@ -82,6 +83,13 @@ func registerStandardCrawlCommandFlags(cmd *cobra.Command, flagOptions *crawlerF
 		"",
 		"set output file for results in json format (example: \"./path/to/output.json\")",
 	)
+	cmd.PersistentFlags().BoolVarP(
+		&flagOptions.InsecureSkipTls,
+		"insecure",
+		"",
+		false,
+		"skip TLS certificate verification",
+	)
 }
 
 func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier, flagOptions crawlerFlagOptions) {
@@ -104,6 +112,19 @@ func registerStandardCrawlCommandFlagModifiers(modifier *crawler.RequestModifier
 	}
 }
 
+func buildHttpClient(flagOptions crawlerFlagOptions) http.Client {
+	transport := http.DefaultTransport
+	if flagOptions.InsecureSkipTls {
+		transport = &http.Transport{
+			TLSClientConfig: &tls.Config{InsecureSkipVerify: true}, //nolint:gosec
+		}
+	}
+	return http.Client{
+		Timeout:   flagOptions.HttpTimeout,
+		Transport: transport,
+	}
+}
+
 func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions crawlerFlagOptions, outWriter io.Writer) error {
 	requests, err := crawler.CreateRequestsFromUrls(urls, modifier)
 	if err != nil {
@@ -119,9 +140,7 @@ func crawlUrls(urls []string, modifier crawler.RequestModifier, flagOptions craw
 
 	crawl := crawler.Crawler{
 		NumberOfWorkers: flagOptions.NumberOfWorkers,
-		HttpClient: http.Client{
-			Timeout: flagOptions.HttpTimeout,
-		},
+		HttpClient:      buildHttpClient(flagOptions),
 		FilterStatusQuery: flagOptions.FilterStatusQuery,
 		OutWriter:         outWriter,
 		OutputFile:        flagOptions.OutputFile,

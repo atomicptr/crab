@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"github.com/atomicptr/crab/pkg/crawler"
 	"github.com/atomicptr/crab/pkg/sitemap"
-	"net/http"
 	"os"
 
 	"github.com/spf13/cobra"
@@ -32,7 +31,7 @@ var SitemapCommand = &cobra.Command{
 
 		sitemapPath := args[0]
 
-		client := http.Client{Timeout: sitemapCommandFlags.HttpTimeout}
+		client := buildHttpClient(sitemapCommandFlags)
 
 		sitemapModifiers := crawler.RequestModifier{}
 		applySitemapModifiers(&sitemapModifiers, sitemapCommandFlags)

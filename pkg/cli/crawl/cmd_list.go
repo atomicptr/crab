@@ -5,7 +5,6 @@ import (
 	"github.com/atomicptr/crab/pkg/crawler"
 	"github.com/atomicptr/crab/pkg/urllist"
 	"github.com/spf13/cobra"
-	"net/http"
 	"os"
 )
 
@@ -31,7 +30,8 @@ var ListCommand = &cobra.Command{
 
 		listPath := args[0]
 
-		urls, err := urllist.FetchUrlsFromPath(listPath, &http.Client{Timeout: listCommandFlags.HttpTimeout})
+		client := buildHttpClient(listCommandFlags)
+		urls, err := urllist.FetchUrlsFromPath(listPath, &client)
 		if err != nil {
 			fmt.Printf("Could not read url list from %s\n\t%s\n", listPath, err)
 			os.Exit(1)

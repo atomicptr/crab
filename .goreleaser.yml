@@ -1,19 +1,19 @@
 version: 2
 
 builds:
-- main: ./cmd/crab/main.go
-  ldflags:
-    - -w -extldflags "-static"
-    - -X github.com/atomicptr/crab/pkg/meta.Version={{.Version}}
-    - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.FullCommit}}
-  env:
-    - CGO_ENABLED=0
-  goos:
-    - linux
-    - darwin
-    - windows
-  goarch:
-    - amd64
+  - main: ./cmd/crab/main.go
+    ldflags:
+      - -w -extldflags "-static"
+      - -X github.com/atomicptr/crab/pkg/meta.Version={{.Version}}
+      - -X github.com/atomicptr/crab/pkg/meta.GitCommit={{.FullCommit}}
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - linux
+      - darwin
+      - windows
+    goarch:
+      - amd64
 archives:
   - id: default
 checksum:
@@ -24,8 +24,8 @@ changelog:
   sort: asc
   filters:
     exclude:
-    - '^docs:'
-    - '^test:'
+      - '^docs:'
+      - '^test:'
 
 # Release
 

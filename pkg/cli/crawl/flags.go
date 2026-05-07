@@ -20,6 +20,7 @@ type crawlerFlagOptions struct {
 	headerMap         map[string]string
 	OutputFile        string
 	OutputJson        string
+	InsecureSkipTls   bool
 }
 
 const (
